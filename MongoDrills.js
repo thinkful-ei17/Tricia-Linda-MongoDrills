@@ -69,13 +69,13 @@ use tempTestDb;
 // db.restaurants.find({'borough': {$in:[listOfBorough]}})
 
 
-db.restaurants.find({borough: {$ne: "Missing"},
-cuisine: {$ne: "Not Listed/Not Applicable"}, 
-grades: {$exists: true}, 
-"grades.grade": {$ne: "Not Yet Graded"}, 
-"grades.score": {$ne: -1}
-}
-).count()
+// db.restaurants.find({borough: {$ne: "Missing"},
+// cuisine: {$ne: "Not Listed/Not Applicable"}, 
+// grades: {$exists: true}, 
+// "grades.grade": {$ne: "Not Yet Graded"}, 
+// "grades.score": {$ne: -1}
+// }
+// ).count()
 
 //db.restaurants.distinct("cuisine")
 // [
@@ -163,3 +163,23 @@ grades: {$exists: true},
 //     "Missing"
 // ]
 
+
+// Ignoring your filter (i.e. querying all of the restaurants):
+// Create a list of all of the cuisines offered by the restaurants, with no duplicates
+// Find the first five restaurants with the lowest positive score in one of their gradings.
+// Find the restaurants which have only been graded A.
+
+// db.restaurants.distinct("cuisine")
+
+// db.restaurants.find({ "grades.score": { "$gt": 4 } }).sort({ "grades.score": 1 }).limit(5).pretty()
+
+// db.restaurants.find({ "grades.score": { "$gt": 0 } }).sort({ "grades.score": 1 }).limit(5).pretty()
+
+db.restaurants.find({ grades: { $ne: [] }, "grades.score": { "$gt": 0 } }).sort({ "grades.score": 1 }).limit(5).pretty()
+
+// db.restaurants.find().$min({ 'grades.scores': 0 }).limit(5).pretty()
+
+// db.restaurants.aggregate([{ $group: { _id: "$name", minScore: { $min: "$grades.score" } } }])
+
+
+// db.restaurants.find({ name: "Homecoming" }).pretty()
