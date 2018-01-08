@@ -19,5 +19,27 @@ use tempTestDb;
 
 // Count by nested value - 11206, document.address.zipcode
 //db.restaurants.find({document.address.zipcode: { $in: ["11206"]}})
+// db.restaurants.find({'address.zipcode': '11206'}).count()
 
-db.runCommand({ count: 'restaurants', query: {address:{ zipcode: { '11206'}}}, limit: 5})
+// Delete by ID
+// db.restaurants.deleteOne({ _id: ObjectId("59074c7c057aaffaafb10acb") })
+// db.restaurants.find({ _id: ObjectId("59074c7c057aaffaafb10acb") })
+
+// Update a single document:  sets the name property of a document with a specific _id to 'Bizz Bar Bang'. Make sure that you're not replacing the existing document, but instead updating only the name property.
+// db.restaurants.update({ _id: ObjectId("59074c7c057aaffaafb0da87") }, { name: "Bizz Bar Bang" })
+// db.restaurants.find({ name: "Bizz Bar Bang" }).pretty()
+
+// Update many documents:  Replace zip code 10035 to 10036
+db.runCommand({
+    update: "restaurants",
+    updates: [{
+        q: {
+            'address.zipcode': "10035"
+        },
+        u: {
+            $set: { 'address.zipcode': "10036" }
+        },
+        multi: true
+    }]
+})
+db.restaurants.find({ 'address.zipcode': "10035" }).count()
